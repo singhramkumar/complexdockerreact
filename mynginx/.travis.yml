@@ -1,0 +1,39 @@
+sudo: required
+services:
+  - docker 
+
+#build test
+before_install:
+  - docker build -t ramkumarsingh/udemycomplexdocker-test -f ./myclientapp/Dockerfile.dev ./myclientapp
+
+#run test
+script:
+  - docker run -e CI=true ramkumarsingh/udemycomplexdocker-test npm run test
+
+#build prod version
+after_success:
+  - docker build -t ramkumarsingh/udemycomplexdocker-client ./myclientapp 
+  - docker build -t ramkumarsingh/udemycomplexdocker-nginx ./mynginx
+  - docker build -t ramkumarsingh/udemycomplexdocker-server ./myserverapp
+  - docker build -t ramkumarsingh/udemycomplexdocker-worker ./myworkerapp   
+
+#push image to docker hub
+  #login to docker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #push image
+  - docker push ramkumarsingh/udemycomplexdocker-client 
+  - docker push ramkumarsingh/udemycomplexdocker-nginx
+  - docker push ramkumarsingh/udemycomplexdocker-server
+  - docker push ramkumarsingh/udemycomplexdocker-worker
+
+  # edge: true
+  # provider: elasticbeanstalk
+  # region: "us-east-2"
+  # app: udemydockerreactapp
+  # env: "Udemydockerreactapp-env"
+  # bucket_name: "elasticbeanstalk-us-east-2-718862171312"
+  # bucket_path: udemydockerreactapp
+  # on:
+  #   branch: master
+  # access_key_id: $AWS_ACCESS_KEY
+  # secret_access_key: $AWS_SECRET_KEY
