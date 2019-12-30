@@ -1,0 +1,45 @@
+version : '3'
+services:
+  postgres:
+    image: 'postgres:latest'
+  redis:
+    image: 'redis:latest'
+  mynginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./mynginx
+    ports: 
+      - '3050:80'
+  myserver:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./myserverapp
+    # volumes:
+    #   - /app/node_modules
+    #   - ./myserverapp:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379 # defualt port for redis
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+  myclient:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./myclientapp
+    # volumes:
+    #   - /app/node_modules
+    #   - ./myclientapp:/app
+  myworker:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./myworkerapp
+    # volumes:
+    #   - /app/node_modules
+    #   - ./myworkerapp:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379 # defualt port for redis
