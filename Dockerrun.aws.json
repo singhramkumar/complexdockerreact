@@ -1,6 +1,6 @@
 {
     "AWSEBDockerrunVersion":2,
-    "ContainerDefinitions":[
+    "containerDefinitions":[
         {
             "name":"myclient",
             "image" : "ramkumarsingh/udemycomplexdocker-client",
