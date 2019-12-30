@@ -25,3 +25,16 @@ after_success:
   - docker push ramkumarsingh/udemycomplexdocker-nginx
   - docker push ramkumarsingh/udemycomplexdocker-server
   - docker push ramkumarsingh/udemycomplexdocker-worker
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: multicontainerdocker
+  env: "Multicontainerdocker-env"
+  bucket_name: "elasticbeanstalk-us-east-2-718862171312"
+  bucket_path: multicontainerdocker
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

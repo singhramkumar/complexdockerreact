@@ -1,0 +1,39 @@
+{
+    "AWSEBDockerrunVersion":2,
+    "ContainerDefinitions":[
+        {
+            "name":"myebsclient",
+            "image" : "ramkumarsingh/udemycomplexdocker-client",
+            "hostname": "client",
+            "essential": false
+        },
+        {
+            "name":"myebsnginx",
+            "image" : "ramkumarsingh/udemycomplexdocker-nginx",
+            "hostname": "nginx",
+            "essential": true,
+            "portMappings" : [
+                {
+                    "hostPort":80,
+                    "ContainerPort":80
+                }
+            ],
+            "links":["client", "server"]
+
+        },
+        {
+            "name":"myebsserver",
+            "image" : "ramkumarsingh/udemycomplexdocker-server",
+            "hostname": "api",
+            "essential": false
+        },
+        {
+            "name":"myebsworker",
+            "image" : "ramkumarsingh/udemycomplexdocker-worker",
+            "hostname": "worker",
+            "essential": false
+        }
+
+    ]
+}
+
